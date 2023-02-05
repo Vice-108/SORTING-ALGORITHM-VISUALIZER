@@ -8,7 +8,7 @@ let minRange = 1;
 let maxRange = slider.value;
 let numOfBars = slider.value;
 let heightFactor = 2.5;
-let speedFactor = 100;
+let speedFactor = 10;
 let unsorted_array = new Array(numOfBars);
 
 slider.addEventListener("input", function () {
@@ -134,6 +134,7 @@ async function partition(items, left, right) {
       j--;
     }
   }
+
   return i;
 }
 
@@ -155,6 +156,7 @@ async function quickSort(items, left, right) {
   for (let i = 0; i < bars.length; i++) {
     bars[i].style.backgroundColor = "aqua";
   }
+
   return items;
 }
 
@@ -193,6 +195,7 @@ async function InsertionSort(array) {
   for (let k = 0; k < bars.length; k++) {
     bars[k].style.backgroundColor = "aqua";
   }
+
   return array;
 }
 
@@ -211,6 +214,7 @@ async function HeapSort(array) {
     bars[k].style.backgroundColor = "aqua";
     await sleep(speedFactor);
   }
+
   return array;
 }
 
@@ -260,7 +264,7 @@ async function mergeSort(arr) {
   const middle = Math.floor(arr.length / 2);
   const left = arr.slice(0, middle);
   const right = arr.slice(middle);
-  let actualHalf = await mergeSort(left);
+  await mergeSort(left);
   await mergeSort(right);
 
   let i = 0;
@@ -325,31 +329,52 @@ function mergeSortD(arr, start, end) {
   let left = arr.slice(start, middle);
   let right = arr.slice(middle, end);
 
-  //mergeSort(left);
+  mergeSort(left);
   mergeSort(right);
+
 }
 
 
 // ALGORITHM SELECT MENU
-sort_btn.addEventListener("click", function () {
+sort_btn.addEventListener("click",async function () {
+  disablebtn()
   switch (algotouse) {
     case "bubble":
-      bubbleSort(unsorted_array);
+      await bubbleSort(unsorted_array);
       break;
     case "merge":
-      mergeSort(unsorted_array);
+      await mergeSort(unsorted_array);
+      enablebtn()
       break;
     case "heap":
-      HeapSort(unsorted_array);
+      await HeapSort(unsorted_array);
+      enablebtn()
       break;
     case "insertion":
-      InsertionSort(unsorted_array);
+      await InsertionSort(unsorted_array);
+      enablebtn()
       break;
     case "quick":
-      quickSort(unsorted_array, 0, unsorted_array.length - 1);
+      await quickSort(unsorted_array, 0, unsorted_array.length - 1);
+      enablebtn()
       break;
     default:
-      bubbleSort(unsorted_array);
+      await bubbleSort(unsorted_array);
+      enablebtn()
       break;
   }
 });
+function enablebtn(){
+  slider.disabled=false;
+  randomize_array.disabled=false;
+  speed.disabled=false;
+  select_algo.disabled=false;
+}
+
+
+function disablebtn(){
+  slider.disabled=true;
+  randomize_array.disabled=true;
+  speed.disabled=true;
+  select_algo.disabled=true;
+}
